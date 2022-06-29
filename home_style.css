@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;700&display=swap');
+
+html {
+    font-family: 'Noto Serif TC', serif;
+}
+
+.main {
+    height: 100vh;
+    /* 自動隱藏超出的文字或圖片 */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.empty {
+    flex: 1;
+}
+
+header {
+    flex: 2;
+    text-align: right;
+}
+
+section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+    min-height: 100vh;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: gray;
+}
+
+a:active {
+    color: lightgray;
+}
+
+.gallery {
+    width: 60%;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    padding: 0;
+}
+
+img {
+    width: 100%;
+}
+
+footer p {
+    text-align: center;
+}
+
+.icon {
+    width: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
