@@ -63,3 +63,12 @@ footer p {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+
+
+.gallery {
+    display: grid;
+
+    grid-template-rows: repeat(8, fr[rowline]);
+    grid-template-columns: repeat(8, fr[colline]);
+}

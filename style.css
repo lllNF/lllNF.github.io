@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;700&display=swap');
+
 html {
-    font-family: sans-serif, '微軟正黑體';
+    font-family: sans-serif;
+    font-size: larger;
 }
 
 
@@ -16,20 +19,21 @@ section {
     background-color: white;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
-    padding: 50px;
+    margin-top: 100px;
+    padding: 100px;
 }
 
 hr {
     background-color: #C8C6C6;
     height: 1px;
     border: 0;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 
 
 h1 {
-    margin-top: 0;
     color: #1B2430;
     text-align: center;
 }
@@ -53,4 +57,27 @@ a:active {
 
 footer p {
     text-align: center;
+}
+
+li {
+    line-height: 1.5;
+}
+
+pre {
+    border-radius: 5px;
+}
+
+.def::before {
+    content: "DEFINITION";
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.def {
+    background-color: #b3b5c7;
+    padding: 5px;
+}
+
+h3 {
+    margin-top: 50px;
 }

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fundamentals of Data Structures in C 筆記</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <style>
+        body {
+            background-color: #51557E;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <h1>Fundamentals of Data Structures in C 筆記</h1>
+        </header>
+        <hr>
+        <main>
+            <p>這個暑假(大一升大二)，我想把這本書仔細的讀完。</p>
+            <section>
+                <h2>目錄</h2>
+                <ol>
+                    <li><a href="#ch1">Basic Concepts</a></li>
+                    <ul>
+                        <li>System Life Cycle</li>
+                        <li>動態配置記憶體</li>
+                        <li>演算法 (Algorithm)</li>
+                        <li>Swap & Compare</li>
+                        <li>ADT</li>
+                    </ul>
+                </ol>
+            </section>
+            <section>
+                <h2 id="ch1">Chapter 1: Basic Concepts</h2>
+                <p>第一章主要在講一些程式、 C 語言以及演算法的基本概念。我並沒有附上本章中為了說明演算法與遞迴而舉例的 selection sort 和 binary search
+                    ，原因是因為這在後面的章節會有更深入的介紹。</p>
+                <h3>System Life Cycle</h3>
+                <p>系統生命週期 (system life cycle) 包含了以下五個階段: </p>
+                <ol>
+                    <li>Requirements</li>
+                    <li>Analysis</li>
+                    <ul>
+                        <li>bottom-up</li>
+                        <li>top-down</li>
+                    </ul>
+                    <li>Design</li>
+                    <li>Coding</li>
+                    <li>Verification</li>
+                    <ul>
+                        <li>correctness proofs: 像是數學證明</li>
+                        <li>testing: 必須要有寫好的 code 以及 testing data 才能進行</li>
+                    </ul>
+                </ol>
+                <h3>動態配置記憶體</h3>
+                <p>在 C 語言中，對指標來說最常見的 operator 有兩個</p>
+                <p>& address operator</p>
+                <p>* dereferecing operator</p>
+                </ol>
+                <p>補充：INT_MAX 和 INT_MIN 被定義在 limits.h</p>
+                <p>為什麼要動態配置記憶體呢？當我們的程式所需要的記憶體大小取決於使用者輸入等在 run-time 時才知道的數值時，一種做法是直接在程式碼中把那些變數直接開到最大，但如果我們想要在 run-time
+                    時才分配儲存空間就必須使用動態配置記憶體 (C 語言使用 heap 的機制來達成)。</p>
+                <p>malloc 的使用方式: </p>
+                <pre class="hljs"
+                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> *pi;
+pi = (<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> *)<span class="hljs-built_in" style="color: rgb(166, 226, 46);">malloc</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">sizeof</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span>));
+<span class="hljs-built_in" style="color: rgb(166, 226, 46);">free</span>(pi);</pre>
+                <p>比較需要注意的是使用完後一定要記得用 free() 把記憶體空間還回去。可以參考<a href="https://en.wikipedia.org/wiki/Dangling_pointer">迷途指標
+                        (維基百科)</a></p>
+                <p>因為在分配記憶體位置的時候，是有可能分配不到，因此我們可以將改成以下程式碼來判斷是否出錯。</p>
+                <pre class="hljs"
+                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">if</span> (!(pi = <span class="hljs-built_in" style="color: rgb(166, 226, 46);">malloc</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">sizeof</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span>)))) {
+    <span class="hljs-built_in" style="color: rgb(166, 226, 46);">fprintf</span>(<span class="hljs-built_in" style="color: rgb(166, 226, 46);">stderr</span>, <span class="hljs-string" style="color: rgb(166, 226, 46);">"malloc failed\n"</span>);
+    <span class="hljs-built_in" style="color: rgb(166, 226, 46);">exit</span>(EXIT_FAILURE);
+}</pre>
+                <p>此外，因為 malloc 之後會常用到，因此作者建議我們把它寫成 Macro</p>
+                <pre class="hljs"
+                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-meta" style="color: rgb(117, 113, 94);">#<span class="hljs-meta-keyword">define</span> MALLOC(p, s)                        \
+    <span class="hljs-meta-keyword">if</span> ((p = malloc(s)) == NULL) {          \
+        fprintf(stderr, <span class="hljs-string" style="color: rgb(166, 226, 46);">"malloc failed\n"</span>); \
+        exit(EXIT_FAILURE);                 \
+    }</span>
+
+<span class="hljs-comment" style="color: rgb(117, 113, 94);">// 用法</span>
+MALLOC(pi, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">sizeof</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span>));</pre>
+
+                <h3>演算法 (Algorithm)</h3>
+                <p class="def">An algorithm is a <em>finite</em> set of instructions that, if followed,
+                    accomplishes a particular task.</p>
+                <p>基本上，一個演算法會包含: </p>
+                <ol>
+                    <li>input</li>
+                    <li>output</li>
+                    <li>definiteness</li>
+                    <li>finiteness (演算法一定會，但程式不一定會)</li>
+                    <li>effectiveness</li>
+                </ol>
+                <h3>Swap & Compare</h3>
+                <p>兩個都可以用 function 或是 Macro 來實現，但是個人偏好使用 Macro ，因為這樣更具有普遍性而不會被限制只能是 integer 型別。</p>
+                <p>swap: </p>
+                <pre class="hljs"
+                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-function"><span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">void</span> <span class="hljs-title" style="color: rgb(166, 226, 46); font-weight: 700;">swap</span><span class="hljs-params">(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> *x, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> *y)</span> </span>{
+    <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+<span class="hljs-comment" style="color: rgb(117, 113, 94);">// 用法</span>
+swap(&amp;a, &amp;b);</pre>
+                <pre class="hljs"
+                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-meta" style="color: rgb(117, 113, 94);">#<span class="hljs-meta-keyword">define</span> SWAP(x, y, t) ((t) = (x), (x) = (y), (y) = (t))</span>
+
+<span class="hljs-comment" style="color: rgb(117, 113, 94);">// 用法</span>
+<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> a, b, temp;
+SWAP(a, b, temp);</pre>
+                <p>compare: </p>
+                <pre class="hljs"
+                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-function"><span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> <span class="hljs-title" style="color: rgb(166, 226, 46); font-weight: 700;">compare</span><span class="hljs-params">(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> x, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> y)</span> </span>{
+    <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">if</span> (x &lt; y)
+        <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">return</span> <span class="hljs-number">-1</span>;
+    <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">else</span> <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">if</span> (x &gt; y)
+        <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">return</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">else</span>
+        <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">return</span> <span class="hljs-number">0</span>;
+}</pre>
+                <pre class="hljs"
+                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-meta" style="color: rgb(117, 113, 94);">#<span class="hljs-meta-keyword">define</span> COMPARE(x, y) ((x) &gt; (y) ? 1 : ((x) <span class="hljs-meta-string">&lt; (y) ? -1 : 0))</span></span></pre>
+                <h3>ADT</h3>
+                <p class="def">A <em>data type</em> is a collection of objects and a set of operations that act on those
+                    objects
+                </p>
+                <p class="def">An <em>abstract data type (ADT)</em> is a data type that is organized in such a way taht
+                    the
+                    specification of the obj and the specification of the operations on the objects is seperated from
+                    the representation of the objects and the implementation of the operations</p>
+                <p>對於 ADT 的實現，某些語言有特別的語法，像是 Ada 的 package 或者是 C++ 的 class ，然而 C 語言並沒有提供這樣的功能。</p>
+                <p>補充：符號 <strong>::=</strong> 用來表示 is defined as</p>
+            </section>
+        </main>
+        <hr>
+        <footer>
+            <p>
+                <a href="../../../index.html">home</a>
+            </p>
+        </footer>
+    </div>
+</body>
+
+</html>
