@@ -4,7 +4,23 @@ html {
     font-family: 'Noto Serif TC', serif;
 }
 
+body {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+h2 {
+    margin-top: 7.5vh;
+}
+
+
 .main {
+    color: #F0EBE3;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background-color: #576F72;
     height: 100vh;
     /* 自動隱藏超出的文字或圖片 */
     overflow: hidden;
