@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FDSC#1 基本知識</title>
-    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="../../../css/style.css">
     <style>
         body {
             background-color: #51557E;
@@ -32,6 +32,16 @@
                 <p>這本書的第一章主要在講一些程式、 C 語言以及演算法的基本概念。我並沒有附上本章中為了說明演算法與遞迴而舉例的 selection sort 和 binary
                     search，原因是那些在後面的章節都會有更深入的介紹。</p>
                 <p>第一章的東西我覺得不用看太仔細，反正很多理論的東西之後章節都會用到，倒是一些常用的函數像是 swap(), compare() 可以先直接記下來。</p>
+                <p><a href="http://hilite.me/">converts your code snippets into pretty-printed HTML format</a></p>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #f92672">pre</span> <span style="color: #f8f8f2">{</span>
+    <span style="color: #66d9ef">padding</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">0.3em</span> <span style="color: #ae81ff">0.6em</span><span style="color: #f8f8f2">;</span>
+    <span style="color: #66d9ef">border</span><span style="color: #f92672">-</span><span style="color: #f8f8f2">radius</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">0.5em</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span>
+</pre>
+                </div>
+
             </section>
 
             <section>
@@ -79,28 +89,39 @@
                     run-time
                     時才分配儲存空間就必須使用動態配置記憶體 (C 語言使用 heap 的機制來達成)。</p>
                 <p>malloc 的使用方式: </p>
-                <pre class="hljs"
-                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> *pi;
-pi = (<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> *)<span class="hljs-built_in" style="color: rgb(166, 226, 46);">malloc</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">sizeof</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span>));
-<span class="hljs-built_in" style="color: rgb(166, 226, 46);">free</span>(pi);</pre>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #66d9ef">int</span> <span style="color: #f92672">*</span><span style="color: #f8f8f2">pi;</span>
+<span style="color: #f8f8f2">pi</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">int</span> <span style="color: #f92672">*</span><span style="color: #f8f8f2">)malloc(</span><span style="color: #66d9ef">sizeof</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">int</span><span style="color: #f8f8f2">));</span>
+<span style="color: #f8f8f2">free(pi);</span>
+</pre>
+                </div>
+
                 <p>比較需要注意的是使用完後一定要記得用 free() 把記憶體空間還回去。可以參考<a href="https://en.wikipedia.org/wiki/Dangling_pointer">迷途指標
                         (維基百科)</a></p>
                 <p>因為在分配記憶體位置的時候，是有可能分配不到，因此我們可以將改成以下程式碼來判斷是否出錯。</p>
-                <pre class="hljs"
-                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">if</span> (!(pi = <span class="hljs-built_in" style="color: rgb(166, 226, 46);">malloc</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">sizeof</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span>)))) {
-    <span class="hljs-built_in" style="color: rgb(166, 226, 46);">fprintf</span>(<span class="hljs-built_in" style="color: rgb(166, 226, 46);">stderr</span>, <span class="hljs-string" style="color: rgb(166, 226, 46);">"malloc failed\n"</span>);
-    <span class="hljs-built_in" style="color: rgb(166, 226, 46);">exit</span>(EXIT_FAILURE);
-}</pre>
-                <p>此外，因為 malloc 之後會常用到，因此作者建議我們把它寫成 Macro</p>
-                <pre class="hljs"
-                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-meta" style="color: rgb(117, 113, 94);">#<span class="hljs-meta-keyword">define</span> MALLOC(p, s)                        \
-    <span class="hljs-meta-keyword">if</span> ((p = malloc(s)) == NULL) {          \
-        fprintf(stderr, <span class="hljs-string" style="color: rgb(166, 226, 46);">"malloc failed\n"</span>); \
-        exit(EXIT_FAILURE);                 \
-    }</span>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(</span><span style="color: #f92672">!</span><span style="color: #f8f8f2">(pi</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">malloc(</span><span style="color: #66d9ef">sizeof</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">int</span><span style="color: #f8f8f2">))))</span> <span style="color: #f8f8f2">{</span>
+    <span style="color: #f8f8f2">fprintf(stderr,</span> <span style="color: #e6db74">&quot;malloc failed</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">);</span>
+    <span style="color: #f8f8f2">exit(EXIT_FAILURE);</span>
+<span style="color: #f8f8f2">}</span>
+</pre>
+                </div>
 
-<span class="hljs-comment" style="color: rgb(117, 113, 94);">// 用法</span>
-MALLOC(pi, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">sizeof</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span>));</pre>
+                <p>此外，因為 malloc 之後會常用到，因此作者建議我們把它寫成 Macro</p>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#define MALLOC(p, s)                        \</span>
+<span style="color: #75715e">    if ((p = malloc(s)) == NULL) {          \</span>
+<span style="color: #75715e">        fprintf(stderr, &quot;malloc failed\n&quot;); \</span>
+<span style="color: #75715e">        exit(EXIT_FAILURE);                 \</span>
+<span style="color: #75715e">    }</span>
+
+<span style="color: #75715e">// 用法</span>
+<span style="color: #f8f8f2">MALLOC(pi,</span> <span style="color: #66d9ef">sizeof</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">int</span><span style="color: #f8f8f2">));</span>
+</pre>
+                </div>
             </section>
 
             <section>
@@ -240,7 +261,7 @@ MALLOC(pi, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weig
                 <p>在 C 語言中我們有兩種方式測量程式的執行時間。</p>
                 <p>方法一：clock()函數</p>
                 <!-- HTML generated using hilite.me -->
-                <div style="background: #272822; overflow:auto;width:auto;padding:.2em .6em;border-radius: 0.5em;">
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
                     <pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;time.h&gt;</span>
 
 <span style="color: #66d9ef">int</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
@@ -257,7 +278,7 @@ MALLOC(pi, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weig
 
                 <p>方法二：time()函數</p>
                 <!-- HTML generated using hilite.me -->
-                <div style="background: #272822; overflow:auto;width:auto;padding:.2em .6em;border-radius: 0.5em;">
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
                     <pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;time.h&gt;</span>
 
 <span style="color: #66d9ef">int</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
