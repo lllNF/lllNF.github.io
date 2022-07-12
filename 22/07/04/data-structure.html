@@ -4,42 +4,51 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fundamentals of Data Structures in C 筆記</title>
+    <title>FDSC#1 基本知識</title>
     <link rel="stylesheet" href="../../../style.css">
     <style>
         body {
             background-color: #51557E;
         }
     </style>
-
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
 </head>
 
 <body>
     <div class="content">
         <header>
-            <h1>Fundamentals of Data Structures in C 筆記</h1>
+            <h1>FDSC#1 基本知識</h1>
+            <p class="subheader">Fundamentals of Data Structures in C 筆記</p>
         </header>
         <hr>
         <main>
-            <p>這個暑假(大一升大二)，我想把這本書仔細的讀完。</p>
+            <section>
+                <p>這個暑假，我想把這本書仔細的讀完。</p>
+                <p>這本書的第一章主要在講一些程式、 C 語言以及演算法的基本概念。我並沒有附上本章中為了說明演算法與遞迴而舉例的 selection sort 和 binary
+                    search，原因是那些在後面的章節都會有更深入的介紹。</p>
+                <p>第一章的東西我覺得不用看太仔細，反正很多理論的東西之後章節都會用到，倒是一些常用的函數像是 swap(), compare() 可以先直接記下來。</p>
+            </section>
+
             <section>
                 <h2>目錄</h2>
-                <ol>
-                    <li><a href="#ch1">Basic Concepts</a></li>
-                    <ul>
-                        <li>System Life Cycle</li>
-                        <li>動態配置記憶體</li>
-                        <li>演算法 (Algorithm)</li>
-                        <li>Swap & Compare</li>
-                        <li>ADT</li>
-                    </ul>
-                </ol>
+                <ul>
+                    <li><a href="#system-life-cycle">System Life Cycle</a></li>
+                    <li><a href="#dynamic-memory">動態配置記憶體</a></li>
+                    <li><a href="#algorithm">演算法 (Algorithm)</a></li>
+                    <li><a href="#swap-and-compare">Swap & Compare</a></li>
+                    <li><a href="#adt">Abstract Data Type</a></li>
+                    <li><a href="#performance">Performance</a></li>
+                    <li><a href="#readings">延伸閱讀</a></li>
+                </ul>
             </section>
+
             <section>
-                <h2 id="ch1">Chapter 1: Basic Concepts</h2>
-                <p>第一章主要在講一些程式、 C 語言以及演算法的基本概念。我並沒有附上本章中為了說明演算法與遞迴而舉例的 selection sort 和 binary search
-                    ，原因是因為這在後面的章節會有更深入的介紹。</p>
-                <h3>System Life Cycle</h3>
+                <h2 id="system-life-cycle">System Life Cycle</h2>
                 <p>系統生命週期 (system life cycle) 包含了以下五個階段: </p>
                 <ol>
                     <li>Requirements</li>
@@ -52,17 +61,22 @@
                     <li>Coding</li>
                     <li>Verification</li>
                     <ul>
-                        <li>correctness proofs: 像是數學證明</li>
-                        <li>testing: 必須要有寫好的 code 以及 testing data 才能進行</li>
+                        <li>correctness proofs: 使用類似數學證明的方式驗證方法是否可行。</li>
+                        <li>testing: 必須要有寫好的 code 以及 testing data 才能進行。</li>
                     </ul>
                 </ol>
-                <h3>動態配置記憶體</h3>
+
+            </section>
+
+            <section>
+                <h2 id="dynamic-memory">動態配置記憶體</h2>
                 <p>在 C 語言中，對指標來說最常見的 operator 有兩個</p>
                 <p>& address operator</p>
                 <p>* dereferecing operator</p>
                 </ol>
                 <p>補充：INT_MAX 和 INT_MIN 被定義在 limits.h</p>
-                <p>為什麼要動態配置記憶體呢？當我們的程式所需要的記憶體大小取決於使用者輸入等在 run-time 時才知道的數值時，一種做法是直接在程式碼中把那些變數直接開到最大，但如果我們想要在 run-time
+                <p>為什麼要動態配置記憶體呢？當我們的程式所需要的記憶體大小取決於使用者輸入等在 run-time 時才知道的數值時，一種做法是直接在程式碼中把那些變數直接開到最大，但如果我們想要在
+                    run-time
                     時才分配儲存空間就必須使用動態配置記憶體 (C 語言使用 heap 的機制來達成)。</p>
                 <p>malloc 的使用方式: </p>
                 <pre class="hljs"
@@ -87,64 +101,200 @@ pi = (<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 7
 
 <span class="hljs-comment" style="color: rgb(117, 113, 94);">// 用法</span>
 MALLOC(pi, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">sizeof</span>(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span>));</pre>
+            </section>
 
-                <h3>演算法 (Algorithm)</h3>
-                <p class="def">An algorithm is a <em>finite</em> set of instructions that, if followed,
+            <section>
+                <h2 id="algorithm">演算法 (Algorithm)</h2>
+                <p class="def">An <em>algorithm</em> is a <strong>finite</strong> set of instructions that, if followed,
                     accomplishes a particular task.</p>
-                <p>基本上，一個演算法會包含: </p>
+                <p>一個演算法必須包含五個要素: </p>
                 <ol>
                     <li>input</li>
                     <li>output</li>
                     <li>definiteness</li>
-                    <li>finiteness (演算法一定會，但程式不一定會)</li>
+                    <li>finiteness (演算法一定是有限的，但程式不一定，可以有無限迴圈)</li>
                     <li>effectiveness</li>
                 </ol>
-                <h3>Swap & Compare</h3>
+            </section>
+
+            <section>
+                <h2 id="swap-and-compare">Swap & Compare</h2>
                 <p>兩個都可以用 function 或是 Macro 來實現，但是個人偏好使用 Macro ，因為這樣更具有普遍性而不會被限制只能是 integer 型別。</p>
-                <p>swap: </p>
-                <pre class="hljs"
-                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-function"><span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">void</span> <span class="hljs-title" style="color: rgb(166, 226, 46); font-weight: 700;">swap</span><span class="hljs-params">(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> *x, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> *y)</span> </span>{
-    <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> temp = *x;
-    *x = *y;
-    *y = temp;
-}
+                <h3>swap()</h3>
+                <p>用 function 實現: </p>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #66d9ef">void</span> <span style="color: #a6e22e">swap</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">int</span> <span style="color: #f92672">*</span><span style="color: #f8f8f2">x,</span> <span style="color: #66d9ef">int</span> <span style="color: #f92672">*</span><span style="color: #f8f8f2">y)</span> <span style="color: #f8f8f2">{</span>
+    <span style="color: #66d9ef">int</span> <span style="color: #f8f8f2">temp</span> <span style="color: #f92672">=</span> <span style="color: #f92672">*</span><span style="color: #f8f8f2">x;</span>
+    <span style="color: #f92672">*</span><span style="color: #f8f8f2">x</span> <span style="color: #f92672">=</span> <span style="color: #f92672">*</span><span style="color: #f8f8f2">y;</span>
+    <span style="color: #f92672">*</span><span style="color: #f8f8f2">y</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">temp;</span>
+<span style="color: #f8f8f2">}</span>
 
-<span class="hljs-comment" style="color: rgb(117, 113, 94);">// 用法</span>
-swap(&amp;a, &amp;b);</pre>
-                <pre class="hljs"
-                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-meta" style="color: rgb(117, 113, 94);">#<span class="hljs-meta-keyword">define</span> SWAP(x, y, t) ((t) = (x), (x) = (y), (y) = (t))</span>
+<span style="color: #75715e">// 用法</span>
+<span style="color: #f8f8f2">swap(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">a,</span> <span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">b);</span>
+</pre>
+                </div>
 
-<span class="hljs-comment" style="color: rgb(117, 113, 94);">// 用法</span>
-<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> a, b, temp;
-SWAP(a, b, temp);</pre>
-                <p>compare: </p>
-                <pre class="hljs"
-                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-function"><span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> <span class="hljs-title" style="color: rgb(166, 226, 46); font-weight: 700;">compare</span><span class="hljs-params">(<span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> x, <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">int</span> y)</span> </span>{
-    <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">if</span> (x &lt; y)
-        <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">return</span> <span class="hljs-number">-1</span>;
-    <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">else</span> <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">if</span> (x &gt; y)
-        <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">return</span> <span class="hljs-number">1</span>;
-    <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">else</span>
-        <span class="hljs-keyword" style="color: rgb(249, 38, 114); font-weight: 700;">return</span> <span class="hljs-number">0</span>;
-}</pre>
-                <pre class="hljs"
-                    style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(39, 40, 34); color: rgb(221, 221, 221);"><span class="hljs-meta" style="color: rgb(117, 113, 94);">#<span class="hljs-meta-keyword">define</span> COMPARE(x, y) ((x) &gt; (y) ? 1 : ((x) <span class="hljs-meta-string">&lt; (y) ? -1 : 0))</span></span></pre>
-                <h3>ADT</h3>
-                <p class="def">A <em>data type</em> is a collection of objects and a set of operations that act on those
+                <p>用 Macro 實現: </p>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#define SWAP(x, y, t) ((t) = (x), (x) = (y), (y) = (t))</span>
+
+<span style="color: #75715e">// 用法</span>
+<span style="color: #66d9ef">int</span> <span style="color: #f8f8f2">a,</span> <span style="color: #f8f8f2">b,</span> <span style="color: #f8f8f2">temp;</span>
+<span style="color: #f8f8f2">SWAP(a,</span> <span style="color: #f8f8f2">b,</span> <span style="color: #f8f8f2">temp);</span>
+</pre>
+                </div>
+
+                <h3>compare()</h3>
+                <p>用 function 實現:</p>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #66d9ef">int</span> <span style="color: #a6e22e">compare</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">int</span> <span style="color: #f8f8f2">x,</span> <span style="color: #66d9ef">int</span> <span style="color: #f8f8f2">y)</span> <span style="color: #f8f8f2">{</span>
+    <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(x</span> <span style="color: #f92672">&lt;</span> <span style="color: #f8f8f2">y)</span>
+        <span style="color: #66d9ef">return</span> <span style="color: #f92672">-</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+    <span style="color: #66d9ef">else</span> <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(x</span> <span style="color: #f92672">&gt;</span> <span style="color: #f8f8f2">y)</span>
+        <span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+    <span style="color: #66d9ef">else</span>
+        <span style="color: #66d9ef">return</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span>
+</pre>
+                </div>
+
+                <p>用 Macro 實現: </p>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:0.3em 0.6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#define COMPARE(x, y) ((x) &gt; (y) ? 1 : ((x) &lt; (y) ? -1 : 0))</span>
+</pre>
+                </div>
+
+
+            </section>
+
+            <section>
+                <h2 id="adt">Abstract Data Type</h2>
+                <p class="def">A <em>data type</em> is a collection of objects and a set of operations that act on
+                    those
                     objects
                 </p>
-                <p class="def">An <em>abstract data type (ADT)</em> is a data type that is organized in such a way taht
+                <p class="def">An <em>abstract data type (ADT)</em> is a data type that is organized in such a way
+                    taht
                     the
-                    specification of the obj and the specification of the operations on the objects is seperated from
+                    specification of the obj and the specification of the operations on the objects is seperated
+                    from
                     the representation of the objects and the implementation of the operations</p>
                 <p>對於 ADT 的實現，某些語言有特別的語法，像是 Ada 的 package 或者是 C++ 的 class ，然而 C 語言並沒有提供這樣的功能。</p>
                 <p>補充：符號 <strong>::=</strong> 用來表示 is defined as</p>
+                <p class="mark">以上 2022.07.04 完成</p>
             </section>
+
+            <section>
+                <h2 id="performance">Performance</h2>
+                <p>基本上，學習完基本語法後我們就能靠自己寫程式來解決許多的問題了，但為什麼我們還需要去學習像是資料結構、演算法的內容呢？</p>
+                <p>我想這個問題的答案是：要寫出更好的程式，就不能只會程式語言的語法。若是這樣，那我們又該如何去評斷一個程式的好壞，或是兩個同樣能解決相同問題的程式碼，究竟孰優孰劣？</p>
+                <p>書中提供了我們幾個可以用來給評斷程式好壞的標準：</p>
+                <ol>
+                    <li>程式是否有達到任務的要求？</li>
+                    <li>程式是否正確運作</li>
+                    <li>有沒有相關的說明文件(可能包含要怎麼使用這個程式以及程式是如何運作ˇ的)</li>
+                    <li>程式碼的可讀性</li>
+                    <li>Does the program effectively use functions to create logical units?(封裝)</li>
+                    <li>Does the program effectively use priority and secondary storage?</li>
+                    <li>Is the program's running time acceptable for the task?</li>
+                </ol>
+                <p>其中，第 6 和第 7 點正是和程式的 performance 有關。對於這兩個問題，通常我們有兩種方法來回答。</p>
+                <ul>
+                    <li>performance analysis: machine-independent</li>
+                    <li>performance measurement: machine-dependent</li>
+                </ul>
+
+                <h3>Performance Analysis</h3>
+                <p class="def">The <em>space complexity</em> of a program is the amount of memory that it needs to
+                    run
+                    to
+                    completion.</p>
+                <p>$$S(P)=C+S_{p}(I)$$</p>
+                <p class="def">The <em>time complexity</em> of a program is the amount of computer time that it
+                    needs to
+                    run to
+                    completion.</p>
+                <p class="def">A <em>program step</em> is a syntactically or semantically meaning ful program
+                    segment
+                    whose
+                    execution time is
+                    independent of the instance characteristics.</p>
+                <p class="def">$f(n)=O(g(n))$ iff there exist positive constants $c$ and $n_{0}$ such that
+                    $f(n)\leq cg(n)$
+                    for all $n, n\geq n_{0}$</p>
+                <p class="def">$f(n)=\Omega(g(n))$ iff there exist positive constants $c$ and $n_{0}$ such that
+                    $f(n)\geq cg(n)$
+                    for all $n, n\geq n_{0}$</p>
+                <p class="def">$f(n)=\Theta(g(n))$ iff there exist positive constants $c_{1}$, $c_{2}$ and $n_{0}$
+                    such
+                    that
+                    $c_{1}g(n)\leq f(n)\leq c_{2}g(n)$
+                    for all $n, n\geq n_{0}$</p>
+                <p class="mark">Thm1.2, Thm1.3, Thm1.4 待完成</p>
+
+                <h3>Performance Measurement</h3>
+                <p>在 C 語言中我們有兩種方式測量程式的執行時間。</p>
+                <p>方法一：clock()函數</p>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:.2em .6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;time.h&gt;</span>
+
+<span style="color: #66d9ef">int</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+    <span style="color: #66d9ef">clock_t</span> <span style="color: #f8f8f2">start</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">clock();</span>
+
+    <span style="color: #75715e">// do something</span>
+
+    <span style="color: #66d9ef">double</span> <span style="color: #f8f8f2">time_spent</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">double</span><span style="color: #f8f8f2">)(clock()</span> <span style="color: #f92672">-</span> <span style="color: #f8f8f2">start)</span> <span style="color: #f92672">/</span> <span style="color: #f8f8f2">CLOCKS_PER_SEC;</span>
+    <span style="color: #f8f8f2">printf(</span><span style="color: #e6db74">&quot;%f</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">time_spent);</span>
+    <span style="color: #66d9ef">return</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span>
+</pre>
+                </div>
+
+                <p>方法二：time()函數</p>
+                <!-- HTML generated using hilite.me -->
+                <div style="background: #272822; overflow:auto;width:auto;padding:.2em .6em;border-radius: 0.5em;">
+                    <pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;time.h&gt;</span>
+
+<span style="color: #66d9ef">int</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+    <span style="color: #66d9ef">time_t</span> <span style="color: #f8f8f2">start</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">time(NULL);</span>
+
+    <span style="color: #75715e">// do something</span>
+
+    <span style="color: #66d9ef">double</span> <span style="color: #f8f8f2">time_spent</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">double</span><span style="color: #f8f8f2">)difftime(time(NULL),</span> <span style="color: #f8f8f2">start);</span>
+    <span style="color: #f8f8f2">printf(</span><span style="color: #e6db74">&quot;%f</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">time_spent);</span>
+    <span style="color: #66d9ef">return</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span>
+</pre>
+                </div>
+
+                <p class="mark">問題(待解決)：What is "type cast"?</p>
+                <p class="mark">問題(待解決)：time() 函數中的參數是甚麼？</p>
+            </section>
+
+            <section>
+                <h2 id="readings">延伸閱讀</h2>
+                <ol>
+                    <li><a
+                            href="https://nycu.primo.exlibrisgroup.com/permalink/886UST_NYCU/1uq600n/alma990005657850206772">C
+                            : an advanced introduction : ANSI C edition
+                        </a></li>
+                    <li><a
+                            href="https://nycu.primo.exlibrisgroup.com/permalink/886UST_NYCU/564rer/alma991003437771006772">Testing
+                            Computer Software
+                        </a></li>
+                </ol>
+            </section>
+
         </main>
         <hr>
         <footer>
             <p>
-                <a href="../../../index.html">home</a>
+                <a href="../../../index.html"><img src="../../../img/icon/icons8-home.gif" alt="" class="icon"></a>
             </p>
         </footer>
     </div>
